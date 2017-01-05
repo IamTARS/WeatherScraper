@@ -6,11 +6,22 @@ request(url, function (error, response, body) {
   if (!error) {
     var $ = cheerio.load(body),
     degreeSign = String.fromCharCode(176);
+    var currentdate = new Date();
+    var datetime = "Last Sync: " + currentdate.getDate() + "/"
+              + (currentdate.getMonth()+1)  + "/"
+              + currentdate.getFullYear() + " @ "
+              + currentdate.getHours() + ":"
+              + currentdate.getMinutes() + ":"
+              + currentdate.getSeconds();
+
+      sunriseTime = $("#cc-sun-rise").html();
+      sunsetTime = $("#cc-sun-set").html();
       actual_temp = $("[data-variable='temperature'] .wx-value").html();
       feels_like = $("[data-variable='feelslike'] .wx-value").html();
       wind_gusts = $("[data-variable='wind_gust_speed'] .wx-value").html();
       location = $("h1.city-nav-header").text();
-
+      
+      console.log(datetime);
       if(wind_gusts > 15){
       console.log("It is windy outside. Be advised.");
       }else if(actual_temp < 35){
@@ -24,6 +35,9 @@ request(url, function (error, response, body) {
       console.log("Location: " + location);
       console.log("It’s " + actual_temp + " F" + degreeSign +" but it feels like " + feels_like + " F" +degreeSign);
       console.log("The wind is " + wind_gusts + " mph.");
+      console.log("The sunrise is at " + sunriseTime);
+      console.log("The sunset is at " + sunsetTime);
+
 
 
 
