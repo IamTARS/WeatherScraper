@@ -1,5 +1,6 @@
 var request = require("request"),
   cheerio = require("cheerio"),
+
   url = "http://www.wunderground.com/cgi-bin/findweather/getForecast?&query=pws:KTXAUSTI77";
 
 request(url, function (error, response, body) {
@@ -14,33 +15,78 @@ request(url, function (error, response, body) {
               + currentdate.getMinutes() + ":"
               + currentdate.getSeconds();
 
+
+      var sun=require('sun-time');
+      var computeSunriseTime = (sun.rise(30.2696786,-97.7806164));
+      var computeSunsetTime = (sun.set(30.2696786,-97.7806164));
+      var currentTime = (currentdate.getHours()+ ":" + currentdate.getMinutes());
+
+      computeSunriseTime = Number(computeSunriseTime.replace(':',''));
+      computeSunsetTime = Number(computeSunsetTime.replace(':',''));
+      currentTime = Number(currentTime.replace(':',''));
+
       sunriseTime = $("#cc-sun-rise").html();
       sunsetTime = $("#cc-sun-set").html();
       actual_temp = $("[data-variable='temperature'] .wx-value").html();
       feels_like = $("[data-variable='feelslike'] .wx-value").html();
       wind_gusts = $("[data-variable='wind_gust_speed'] .wx-value").html();
       location = $("h1.city-nav-header").text();
-      
-      console.log(datetime);
-      if(wind_gusts > 15){
-      console.log("It is windy outside. Be advised.");
-      }else if(actual_temp < 35){
-      console.log("It is cold outside today. The weather may not be suitable to play soccer.");
-      }else if(actual_temp > 80){
-      console.log("It's hot today, bring a water bottle if you are going to play soccer.");
-      }else{
-      console.log("The weather is perfect for soccer down at Zilker. ")
-      }
 
-      console.log("Location: " + location);
-      console.log("It’s " + actual_temp + " F" + degreeSign +" but it feels like " + feels_like + " F" +degreeSign);
-      console.log("The wind is " + wind_gusts + " mph.");
-      console.log("The sunrise is at " + sunriseTime);
-      console.log("The sunset is at " + sunsetTime);
+      if((currentTime > computeSunriseTime) && (currentTime < computeSunsetTime)){
+
+        console.log(datetime);
+
+        console.log("Location: " + location);
+        console.log("It’s " + actual_temp + " F" + degreeSign +" but it feels like " + feels_like + " F" +degreeSign);
+        console.log("The wind is " + wind_gusts + " mph.");
+        if(wind_gusts > 15){
+        console.log("It is windy outside. Be advised.");
+        }else if(actual_temp < 32){
+        console.log("It is cold outside today. The weather may not be suitable to play soccer.");
+        }else if(actual_temp > 80){
+        console.log("It's hot today, bring a water bottle if you are going to play soccer.");
+        }else{
+        console.log("The weather is perfect for soccer down at Zilker. ")
+        }
+        console.log("The sunrise is at " + sunriseTime +" AM");
+        console.log("The sunset is at " + sunsetTime +" PM");
+
+        if (currentTime >= (computeSunsetTime - 100)){
+
+
+        if(wind_gusts > 15){
+        console.log("The sun is setting in an hour and it is windy outside. Be advised.");
+        }else if(actual_temp < 32){
+        console.log("The sun is setting in an hour it is below freezing outside! The weather may not be suitable to play soccer.");
+        }else if(actual_temp > 80){
+        console.log("The sun is setting within the hour. Be advised");
+        }else{
+        console.log("The weather is perfect for soccer down at Zilker, but the sun is setting within an hour. Be advised. ")
+        }
+        };
+
+        if (currentTime <= (computeSunriseTime)){
+
+
+        if(wind_gusts > 15){
+        console.log("It is night time and it is windy outside be advised. The sun rises at " + sunriseTime +" AM.");
+        }else if(actual_temp < 32){
+        console.log("It is freezing and dark outside right now. It is not advised to go play soccer right now. The sun rises at " + sunriseTime +" AM. It will warm up once the sun rises.");
+        }else if(actual_temp > 80){
+        console.log("The sun rises at " + sunriseTime +" AM. It should be a warm day to play outside. Bring water to stay hydrated!");
+        }else{
+        console.log("The weather is perfect for soccer down at Zilker, but it is still night time. The sun rises at " + sunriseTime +" AM." );
+        }
 
 
 
+        };
 
+
+
+       }else {
+       console.log("The sun has set, go to Zilker tomorrow! The sun rises at " + sunriseTime +" AM");
+       }
   } else {
     console.log("We’ve encountered an error: " + error);
   }
