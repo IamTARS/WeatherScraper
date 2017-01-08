@@ -64,29 +64,18 @@ request(url, function (error, response, body) {
         console.log("The weather is perfect for soccer down at Zilker, but the sun is setting within an hour. Be advised. ")
         }
         };
-
-        if (currentTime <= (computeSunriseTime)){
-
-
-        if(wind_gusts > 15){
-        console.log("It is night time and it is windy outside be advised. The sun rises at " + sunriseTime +" AM.");
-        }else if(actual_temp < 32){
-        console.log("It is freezing and dark outside right now. It is not advised to go play soccer right now. The sun rises at " + sunriseTime +" AM. It will warm up once the sun rises.");
-        }else if(actual_temp > 80){
-        console.log("The sun rises at " + sunriseTime +" AM. It should be a warm day to play outside. Bring water to stay hydrated!");
-        }else{
-        console.log("The weather is perfect for soccer down at Zilker, but it is still night time. The sun rises at " + sunriseTime +" AM." );
-        }
-
-
-
-        };
-
-
-
        }else {
-       console.log("The sun has set, go to Zilker tomorrow! The sun rises at " + sunriseTime +" AM");
+
+       if(wind_gusts > 15){
+       console.log("It is night time and it is windy outside be advised. The sun rises at " + sunriseTime +" AM.");
+       }else if(actual_temp < 32){
+       console.log("It is freezing and dark outside right now. It is not advised to go play soccer right now. The sun rises at " + sunriseTime +" AM. It will warm up once the sun rises.");
+       }else if(actual_temp > 80){
+       console.log("The sun rises at " + sunriseTime +" AM. It should be a warm day to play outside. Bring water to stay hydrated!");
+       }else{
+       console.log("The weather is perfect for soccer down at Zilker, but the sun has set. The sun rises at " + sunriseTime +" AM." );
        }
+       };
   } else {
     console.log("We’ve encountered an error: " + error);
   }
